@@ -1,0 +1,515 @@
+-- ============================================================
+-- ESQUEMA: auth
+-- ============================================================
+
+-- auth.rol
+UPDATE "auth"."rol"
+    SET "descripcion" = 'Usuario con acceso total y control administrativo del sistema'
+    WHERE "id_rol" = 1;
+
+UPDATE "auth"."rol"
+    SET "nombre_rol" = 'Admin'
+    WHERE "id_rol" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "auth"."rol"
+    SET "activo" = false
+    WHERE "nombre_rol" = 'Gerente';
+
+-- auth.tipo_documento
+UPDATE "auth"."tipo_documento"
+    SET "codigo" = 'PSP'
+    WHERE "nombre" = 'Pasaporte';
+
+UPDATE "auth"."tipo_documento"
+    SET "nombre" = 'Numero de Identificacion Tributaria'
+    WHERE "codigo" = 'NIT';
+
+-- ELIMINACION LOGICA
+UPDATE "auth"."tipo_documento"
+    SET "activo" = false
+    WHERE "codigo" = 'CE';
+
+-- auth.usuario
+UPDATE "auth"."usuario"
+    SET "ciudad" = 'Medellin'
+    WHERE "email" = 'juan.perez@email.com';
+
+UPDATE "auth"."usuario"
+    SET "estado" = 'suspendido'
+    WHERE "cedula" = '5555555555';
+
+-- ELIMINACION LOGICA
+UPDATE "auth"."usuario"
+    SET "activo" = false
+    WHERE "id_usuario" = 5;
+
+-- auth.credencial
+UPDATE "auth"."credencial"
+    SET "intentos_fallidos" = 2
+    WHERE "id_usuario" = 3;
+
+UPDATE "auth"."credencial"
+    SET "requiere_cambio" = true
+    WHERE "id_usuario" = 4;
+
+-- ELIMINACION LOGICA
+UPDATE "auth"."credencial"
+    SET "activo" = false
+    WHERE "id_usuario" = 5;
+
+-- auth.usuario_rol
+UPDATE "auth"."usuario_rol"
+    SET "id_rol" = 1
+    WHERE "id_usuario" = 2 AND "id_rol" = 3;
+
+UPDATE "auth"."usuario_rol"
+    SET "fecha_asignacion" = CURRENT_TIMESTAMP
+    WHERE "id_usuario" = 3 AND "id_rol" = 2;
+
+-- ELIMINACION LOGICA
+UPDATE "auth"."usuario_rol"
+    SET "activo" = false
+    WHERE "id_usuario" = 4;
+
+-- auth.auditoria_login
+UPDATE "auth"."auditoria_login"
+    SET "estado_evento" = 'exitoso'
+    WHERE ctid = (
+        SELECT ctid FROM "auth"."auditoria_login"
+        WHERE "id_usuario" = 3 AND "estado_evento" = 'exitoso'
+        LIMIT 1
+    );
+
+UPDATE "auth"."auditoria_login"
+    SET "navegador" = 'Chrome 121'
+    WHERE "id_usuario" = 1 AND "navegador" LIKE 'Chrome%';
+
+
+-- ============================================================
+-- ESQUEMA: soporte
+-- (antes pqr_schema + auditoria)
+-- ============================================================
+
+-- soporte.estado_pqr
+UPDATE "soporte"."estado_pqr"
+    SET "descripcion" = 'Peticion registrada y en cola de revision'
+    WHERE "nombre" = 'Abierta';
+
+UPDATE "soporte"."estado_pqr"
+    SET "nombre" = 'En Proceso'
+    WHERE "id_estado" = 2;
+
+-- ELIMINACION LOGICA
+UPDATE "soporte"."estado_pqr"
+    SET "activo" = false
+    WHERE "nombre" = 'Cerrada';
+
+-- soporte.pqr
+UPDATE "soporte"."pqr"
+    SET "id_estado" = 3
+    WHERE "id_usuario" = 4;
+
+UPDATE "soporte"."pqr"
+    SET "descripcion" = 'Problema con acceso - actualizado por soporte'
+    WHERE "id_pqr" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "soporte"."pqr"
+    SET "activo" = false
+    WHERE "id_usuario" = 3;
+
+-- soporte.adjunto
+UPDATE "soporte"."adjunto"
+    SET "tamano_bytes" = 520000
+    WHERE "nombre_archivo" = 'error_screenshot.png';
+
+UPDATE "soporte"."adjunto"
+    SET "tipo_mime" = 'image/jpeg'
+    WHERE "id_adjunto" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "soporte"."adjunto"
+    SET "activo" = false
+    WHERE "id_pqr" = 2;
+
+
+-- ============================================================
+-- ESQUEMA: educacion
+-- ============================================================
+
+-- educacion.modulo_educativo
+UPDATE "educacion"."modulo_educativo"
+    SET "nivel" = 'intermedio'
+    WHERE "titulo" = 'Introduccion a Finanzas Personales';
+
+UPDATE "educacion"."modulo_educativo"
+    SET "contenido" = 'Contenido actualizado con casos practicos'
+    WHERE "id_modulo" = 2;
+
+-- ELIMINACION LOGICA
+UPDATE "educacion"."modulo_educativo"
+    SET "activo" = false
+    WHERE "id_modulo" = 4;
+
+-- educacion.contenido
+UPDATE "educacion"."contenido"
+    SET "duracion_minutos" = 20
+    WHERE "titulo" = 'Video Introduccion Finanzas';
+
+UPDATE "educacion"."contenido"
+    SET "url_video" = 'https://example.com/videos/intro1_v2.mp4'
+    WHERE "id_contenido" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "educacion"."contenido"
+    SET "activo" = false
+    WHERE "id_contenido" = 4;
+
+-- educacion.leccion
+UPDATE "educacion"."leccion"
+    SET "numero_leccion" = 3
+    WHERE "titulo" = 'Leccion 2: Presupuesto Personal';
+
+UPDATE "educacion"."leccion"
+    SET "duracion_minutos" = 50
+    WHERE "id_leccion" = 4;
+
+-- ELIMINACION LOGICA
+UPDATE "educacion"."leccion"
+    SET "activo" = false
+    WHERE "id_leccion" = 4;
+
+-- educacion.progreso_educativo
+UPDATE "educacion"."progreso_educativo"
+    SET "calificacion" = 85
+    WHERE "id_usuario" = 3;
+
+UPDATE "educacion"."progreso_educativo"
+    SET "fecha_completado" = CURRENT_TIMESTAMP
+    WHERE "id_usuario" = 4 AND "id_modulo" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "educacion"."progreso_educativo"
+    SET "activo" = false
+    WHERE "id_usuario" = 2;
+
+-- educacion.progreso_leccion
+UPDATE "educacion"."progreso_leccion"
+    SET "completado" = true, "fecha_completado" = CURRENT_TIMESTAMP
+    WHERE "id_usuario" = 2;
+
+UPDATE "educacion"."progreso_leccion"
+    SET "fecha_inicio" = CURRENT_TIMESTAMP - INTERVAL '45 days'
+    WHERE "id_usuario" = 3;
+
+-- ELIMINACION LOGICA
+UPDATE "educacion"."progreso_leccion"
+    SET "activo" = false
+    WHERE "id_usuario" = 3 AND "id_leccion" = 4;
+
+
+-- ============================================================
+-- ESQUEMA: finanzas
+-- (antes finanzas + inversion + metas)
+-- ============================================================
+
+-- finanzas.categoria
+UPDATE "finanzas"."categoria"
+    SET "nombre" = 'Vivienda y Arriendo'
+    WHERE "id_categoria" = 1;
+
+UPDATE "finanzas"."categoria"
+    SET "descripcion" = 'Gastos en transporte publico y privado'
+    WHERE "id_categoria" = 4;
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."categoria"
+    SET "activo" = false
+    WHERE "nombre" = 'Salud';
+
+-- finanzas.movimiento_ingreso_egreso
+UPDATE "finanzas"."movimiento_ingreso_egreso"
+    SET "monto" = 5200000
+    WHERE "nombre" = 'Salario Enero';
+
+UPDATE "finanzas"."movimiento_ingreso_egreso"
+    SET "es_ingreso" = true
+    WHERE "nombre" = 'Gasto Servicios';
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."movimiento_ingreso_egreso"
+    SET "activo" = false
+    WHERE "nombre" = 'Gasto Alimentacion';
+
+-- finanzas.tipo_ingreso
+UPDATE "finanzas"."tipo_ingreso"
+    SET "descripcion" = 'Ingreso mensual fijo por trabajo dependiente'
+    WHERE "nombre_movimiento_pago" = 'Salario';
+
+UPDATE "finanzas"."tipo_ingreso"
+    SET "nombre_movimiento_pago" = 'Trabajo Independiente'
+    WHERE "id_tipo_ingreso" = 2;
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."tipo_ingreso"
+    SET "activo" = false
+    WHERE "nombre_movimiento_pago" = 'Bonificacion';
+
+-- finanzas.finanzas
+UPDATE "finanzas"."finanzas"
+    SET "disponible" = 1900000
+    WHERE "id_usuario" = 1;
+
+UPDATE "finanzas"."finanzas"
+    SET "monto_presupuesto" = 4000000
+    WHERE "id_usuario" = 2;
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."finanzas"
+    SET "activo" = false
+    WHERE "id_usuario" = 3;
+
+-- finanzas.tipo_inversion (antes inversion.tipo_inversion)
+UPDATE "finanzas"."tipo_inversion"
+    SET "descripcion" = 'Inversion en titulos de participacion accionaria de empresas cotizadas'
+    WHERE "nombre" = 'Acciones';
+
+UPDATE "finanzas"."tipo_inversion"
+    SET "nombre" = 'Fondos de Inversion Colectiva'
+    WHERE "id_tipo_inversion" = 2;
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."tipo_inversion"
+    SET "activo" = false
+    WHERE "nombre" = 'Criptomonedas';
+
+-- finanzas.nivel_riesgo (antes inversion.nivel_riesgo)
+UPDATE "finanzas"."nivel_riesgo"
+    SET "fecha_modificacion" = CURRENT_TIMESTAMP
+    WHERE "nombre" = 'Medio';
+
+UPDATE "finanzas"."nivel_riesgo"
+    SET "nombre" = 'Riesgo Bajo'
+    WHERE "id_nivel_riesgo" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."nivel_riesgo"
+    SET "activo" = false
+    WHERE "nombre" = 'Alto';
+
+-- finanzas.movimiento_inversion (antes inversion.movimiento_ingreso_egreso)
+UPDATE "finanzas"."movimiento_inversion"
+    SET "monto" = 1050000
+    WHERE "nombre" = 'Inversion Acciones';
+
+UPDATE "finanzas"."movimiento_inversion"
+    SET "es_ingreso" = true
+    WHERE "nombre" = 'Ganancia Fondos';
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."movimiento_inversion"
+    SET "activo" = false
+    WHERE "nombre" = 'Inversion Bonos';
+
+-- finanzas.tipo_ingreso_inversion (antes inversion.tipo_ingreso)
+UPDATE "finanzas"."tipo_ingreso_inversion"
+    SET "descripcion" = 'Ganancias por interes compuesto de inversiones'
+    WHERE "nombre_movimiento_pago" = 'Rendimiento';
+
+UPDATE "finanzas"."tipo_ingreso_inversion"
+    SET "nombre_movimiento_pago" = 'Rendimiento Anual'
+    WHERE "id_tipo_ingreso" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."tipo_ingreso_inversion"
+    SET "activo" = false
+    WHERE "nombre_movimiento_pago" = 'Dividendos';
+
+-- finanzas.inversion (antes inversion.inversion)
+UPDATE "finanzas"."inversion"
+    SET "rentabilidad" = 14.00
+    WHERE "nombre" = 'Acciones Tecnologicas';
+
+UPDATE "finanzas"."inversion"
+    SET "fecha_fin" = CURRENT_DATE + INTERVAL '90 days'
+    WHERE "id_usuario" = 2;
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."inversion"
+    SET "activo" = false
+    WHERE "id_usuario" = 5;
+
+-- finanzas.editar_meta (antes metas.editar_meta)
+UPDATE "finanzas"."editar_meta"
+    SET "monto_objetivo" = 12000000
+    WHERE "nombre" = 'Fondo Emergencia';
+
+UPDATE "finanzas"."editar_meta"
+    SET "ahorro_mensual" = 1200000
+    WHERE "id_editar_meta" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."editar_meta"
+    SET "activo" = false
+    WHERE "nombre" = 'Auto Nuevo';
+
+-- finanzas.movimiento_meta (antes metas.movimiento_ingreso_egreso)
+UPDATE "finanzas"."movimiento_meta"
+    SET "monto" = 550000
+    WHERE "nombre" = 'Aporte Meta Enero';
+
+UPDATE "finanzas"."movimiento_meta"
+    SET "es_ingreso" = false
+    WHERE "nombre" = 'Aporte Meta Febrero';
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."movimiento_meta"
+    SET "activo" = false
+    WHERE "nombre" = 'Aporte Meta Marzo';
+
+-- finanzas.tipo_ingreso_meta (antes metas.tipo_ingreso)
+UPDATE "finanzas"."tipo_ingreso_meta"
+    SET "descripcion" = 'Aporte mensual regular destinado a objetivo de meta'
+    WHERE "nombre_movimiento_pago" = 'Aporte Regular';
+
+UPDATE "finanzas"."tipo_ingreso_meta"
+    SET "nombre_movimiento_pago" = 'Aporte Mensual Fijo'
+    WHERE "id_tipo_ingreso" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."tipo_ingreso_meta"
+    SET "activo" = false
+    WHERE "nombre_movimiento_pago" = 'Aporte Especial';
+
+-- finanzas.meta (antes metas.meta)
+UPDATE "finanzas"."meta"
+    SET "monto_actual" = 6000000
+    WHERE "nombre" = 'Fondo de Emergencia';
+
+UPDATE "finanzas"."meta"
+    SET "color" = '#CCCCCC'
+    WHERE "nombre" = 'Vacaciones';
+
+-- ELIMINACION LOGICA
+UPDATE "finanzas"."meta"
+    SET "activo" = false
+    WHERE "id_meta" = 4;
+
+
+-- ============================================================
+-- ESQUEMA: negocio
+-- (antes intermediacion + leads_schema + creditos + transacciones)
+-- ============================================================
+
+-- negocio.banco (antes intermediacion.banco)
+UPDATE "negocio"."banco"
+    SET "comision_porcentaje" = 2.75
+    WHERE "nombre_banco" = 'Banco Colombiano';
+
+UPDATE "negocio"."banco"
+    SET "telefono" = '6015559999'
+    WHERE "nombre_banco" = 'Banco Colombiano';
+
+-- ELIMINACION LOGICA
+UPDATE "negocio"."banco"
+    SET "estado" = 'inactivo'
+    WHERE "nombre_banco" = 'Banco Pacifico';
+
+-- negocio.producto_crediticio (antes intermediacion.producto_crediticio)
+UPDATE "negocio"."producto_crediticio"
+    SET "tasa_minima" = 9.50
+    WHERE "nombre_producto" = 'Credito Personal';
+
+UPDATE "negocio"."producto_crediticio"
+    SET "plazo_maximo" = 120
+    WHERE "nombre_producto" = 'Microcredito';
+
+-- ELIMINACION LOGICA
+UPDATE "negocio"."producto_crediticio"
+    SET "activo" = false
+    WHERE "nombre_producto" = 'Microcredito';
+
+-- negocio.asesor_bancario (antes intermediacion.asesor_bancario)
+UPDATE "negocio"."asesor_bancario"
+    SET "especialidad" = 'Creditos Empresariales'
+    WHERE "nombre" = 'Roberto' AND "apellido" = 'Sanchez';
+
+UPDATE "negocio"."asesor_bancario"
+    SET "email" = 'diana.v@bancocol.com'
+    WHERE "nombre" = 'Diana' AND "apellido" = 'Valenzuela';
+
+-- ELIMINACION LOGICA
+UPDATE "negocio"."asesor_bancario"
+    SET "activo" = false
+    WHERE "id_asesor" = 4;
+
+-- negocio.contacto_asesor (antes intermediacion.contacto_asesor)
+UPDATE "negocio"."contacto_asesor"
+    SET "disponible_desde" = '07:00', "disponible_hasta" = '19:00'
+    WHERE "id_asesor" = 1;
+
+UPDATE "negocio"."contacto_asesor"
+    SET "dias_disponibles" = 'Lunes a Sabado'
+    WHERE "id_asesor" = 3;
+
+-- ELIMINACION LOGICA
+UPDATE "negocio"."contacto_asesor"
+    SET "activo" = false
+    WHERE "id_asesor" = 4;
+
+-- negocio.lead (antes leads_schema.lead)
+UPDATE "negocio"."lead"
+    SET "estado_lead" = 'en_proceso'
+    WHERE "id_usuario" = 4;
+
+UPDATE "negocio"."lead"
+    SET "observaciones" = 'Cliente actualizado, pendiente ultima revision de documentos'
+    WHERE "id_lead" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "negocio"."lead"
+    SET "activo" = false
+    WHERE "id_lead" = 5;
+
+-- negocio.conversacion_usuario_asesor (antes leads_schema.conversacion_usuario_asesor)
+UPDATE "negocio"."conversacion_usuario_asesor"
+    SET "tipo_contacto" = 'presencial'
+    WHERE "id_conversacion" = 2;
+
+UPDATE "negocio"."conversacion_usuario_asesor"
+    SET "contenido" = 'Reunion realizada exitosamente para aclaracion de terminos del credito'
+    WHERE "id_conversacion" = 1;
+
+-- ELIMINACION LOGICA
+UPDATE "negocio"."conversacion_usuario_asesor"
+    SET "activo" = false
+    WHERE "id_lead" = 5;
+
+-- negocio.credito_desembolsado (antes creditos.credito_desembolsado)
+UPDATE "negocio"."credito_desembolsado"
+    SET "estado_credito" = 'pagado', "saldo_actual" = 0
+    WHERE "numero_credito" = 'CRED-2024-001';
+
+UPDATE "negocio"."credito_desembolsado"
+    SET "saldo_actual" = 195000000
+    WHERE "id_usuario" = 2;
+
+-- ELIMINACION LOGICA
+UPDATE "negocio"."credito_desembolsado"
+    SET "activo" = false
+    WHERE "id_credito" = 4;
+
+-- negocio.transaccion_comision (antes transacciones.transaccion_comision)
+UPDATE "negocio"."transaccion_comision"
+    SET "estado" = 'pagada', "referencia_pago" = 'TRANS-002-PAG-2024'
+    WHERE "id_transaccion" = 2;
+
+UPDATE "negocio"."transaccion_comision"
+    SET "monto_comision" = 5100000
+    WHERE "id_credito" = 2;
+
+-- ELIMINACION LOGICA
+UPDATE "negocio"."transaccion_comision"
+    SET "activo" = false
+    WHERE "id_transaccion" = 4;
