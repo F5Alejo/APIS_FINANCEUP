@@ -230,6 +230,8 @@ func validarRelacionesLeccion(idModulo int, idContenido *int) error {
 	return nil
 }
 
+
+
 func existeRegistro(tabla string, columna string, id int) (bool, error) {
 	query := "SELECT EXISTS (SELECT 1 FROM " + tabla + " WHERE " + columna + " = $1)"
 
@@ -240,6 +242,6 @@ func existeRegistro(tabla string, columna string, id int) (bool, error) {
 	}
 
 
-	
+
 	return existe, nil
 }
