@@ -1,4 +1,4 @@
-package handlers
+package controllers
 
 import (
 	"database/sql"
@@ -14,7 +14,7 @@ import (
 	"github.com/lib/pq"
 )
 
-func GetModulosEducativos(w http.ResponseWriter, r *http.Request) {
+func ObtenerModulosEducativos(w http.ResponseWriter, r *http.Request) {
 	rows, err := config.DB.Query(`
 		SELECT id_modulo, titulo, descripcion, contenido, nivel, url_thumbnail, activo, fecha_creacion, fecha_modificacion
 		FROM modulo_educativo
@@ -45,7 +45,7 @@ func GetModulosEducativos(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, modulos)
 }
 
-func GetModuloEducativoByID(w http.ResponseWriter, r *http.Request) {
+func ObtenerModuloEducativoPorID(w http.ResponseWriter, r *http.Request) {
 	idModulo, err := getIDFromRequest(r, "id")
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "id invalido")
@@ -71,7 +71,7 @@ func GetModuloEducativoByID(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, modulo)
 }
 
-func CreateModuloEducativo(w http.ResponseWriter, r *http.Request) {
+func CrearModuloEducativo(w http.ResponseWriter, r *http.Request) {
 	var modulo models.ModuloEducativo
 	if err := json.NewDecoder(r.Body).Decode(&modulo); err != nil {
 		writeError(w, http.StatusBadRequest, "json invalido")
@@ -97,7 +97,7 @@ func CreateModuloEducativo(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusCreated, createdModulo)
 }
 
-func UpdateModuloEducativo(w http.ResponseWriter, r *http.Request) {
+func ActualizarModuloEducativo(w http.ResponseWriter, r *http.Request) {
 	idModulo, err := getIDFromRequest(r, "id")
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "id invalido")
@@ -139,7 +139,7 @@ func UpdateModuloEducativo(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, updatedModulo)
 }
 
-func DeleteModuloEducativo(w http.ResponseWriter, r *http.Request) {
+func EliminarModuloEducativo(w http.ResponseWriter, r *http.Request) {
 	idModulo, err := getIDFromRequest(r, "id")
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "id invalido")

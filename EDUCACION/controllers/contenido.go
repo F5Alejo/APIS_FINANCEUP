@@ -1,4 +1,4 @@
-package handlers
+package controllers
 
 import (
 	"database/sql"
@@ -12,7 +12,7 @@ import (
 	"github.com/lib/pq"
 )
 
-func GetContenidos(w http.ResponseWriter, r *http.Request) {
+func ObtenerContenidos(w http.ResponseWriter, r *http.Request) {
 	rows, err := config.DB.Query(`
 		SELECT id_contenido, titulo, descripcion, duracion_minutos, url_video, activo, fecha_creacion, fecha_modificacion
 		FROM contenido
@@ -43,7 +43,7 @@ func GetContenidos(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, contenidos)
 }
 
-func GetContenidoByID(w http.ResponseWriter, r *http.Request) {
+func ObtenerContenidoPorID(w http.ResponseWriter, r *http.Request) {
 	idContenido, err := getIDFromRequest(r, "id")
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "id invalido")
@@ -69,7 +69,7 @@ func GetContenidoByID(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, contenido)
 }
 
-func CreateContenido(w http.ResponseWriter, r *http.Request) {
+func CrearContenido(w http.ResponseWriter, r *http.Request) {
 	var contenido models.Contenido
 	if err := json.NewDecoder(r.Body).Decode(&contenido); err != nil {
 		writeError(w, http.StatusBadRequest, "json invalido")
@@ -91,7 +91,7 @@ func CreateContenido(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusCreated, createdContenido)
 }
 
-func UpdateContenido(w http.ResponseWriter, r *http.Request) {
+func ActualizarContenido(w http.ResponseWriter, r *http.Request) {
 	idContenido, err := getIDFromRequest(r, "id")
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "id invalido")
@@ -128,7 +128,7 @@ func UpdateContenido(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, updatedContenido)
 }
 
-func DeleteContenido(w http.ResponseWriter, r *http.Request) {
+func EliminarContenido(w http.ResponseWriter, r *http.Request) {
 	idContenido, err := getIDFromRequest(r, "id")
 	if err != nil {
 		writeError(w, http.StatusBadRequest, "id invalido")

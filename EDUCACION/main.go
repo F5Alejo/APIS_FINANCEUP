@@ -16,12 +16,9 @@ import (
 func main() {
 	config.ConnectDB()
 
-	r:=mux.NewRouter()
-	r.PathPrefix("/").Handler(routes.RegistrarModuloEducativoRoutes())
-	r.PathPrefix("/").Handler(routes.RegistrarContenidoRoutes())
-
+	r := mux.NewRouter()
+	routes.RegistrarRutas(r)
 
 	log.Println("Servidor EDUCACION escuchando en :8080")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
-
