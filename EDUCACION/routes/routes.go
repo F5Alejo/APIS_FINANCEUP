@@ -7,4 +7,5 @@ func RegistrarRutas(router *mux.Router) {
 	RegistrarRutasContenido(router)
 	RegistrarRutasLeccion(router)
 	RegistrarRutasProgresoEducativo(router)
+	RegistrarRutasProgresoLeccion(router)
 }
