@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"API_GO_CRUD/config"
-	"API_GO_CRUD/models"
+	"NEGOCIO/config"
+	"NEGOCIO/models"
 	"database/sql"
 	"encoding/json"
 	"net/http"

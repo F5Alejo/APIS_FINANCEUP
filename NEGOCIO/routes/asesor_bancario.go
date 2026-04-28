@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"FINANCEUP/controllers"
+	"NEGOCIO/controllers"
 	"github.com/gorilla/mux"
 )
 

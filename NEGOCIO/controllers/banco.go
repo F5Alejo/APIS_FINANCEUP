@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"FINANCEUP/config"
-	"FINANCEUP/models"
+	"NEGOCIO/config"
+	"NEGOCIO/models"
 	"database/sql"
 	"encoding/json"
 	"net/http"

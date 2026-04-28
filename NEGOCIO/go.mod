@@ -1,4 +1,4 @@
-module FINANCEUP
+module NEGOCIO
 
 go 1.26.2
 

@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"FINANCEUP/config"
-	"FINANCEUP/routes"
+	"NEGOCIO/config"
+	"NEGOCIO/routes"
 
 	"github.com/gorilla/mux"
 )
@@ -32,12 +32,7 @@ func main() {
 	// ── Registro de rutas del esquema NEGOCIO ──
 	routes.RegisterBancoRoutes(r)
 	routes.RegisterProductoCrediticioRoutes(r)
-	routes.RegisterAsesorBancarioRoutes(r)
-	routes.RegisterContactoAsesorRoutes(r)
-	routes.RegisterLeadRoutes(r)
-	routes.RegisterConversacionRoutes(r)
-	routes.RegisterCreditoDesembolsadoRoutes(r)
-	routes.RegisterTransaccionComisionRoutes(r)
+	
 	
 
 	log.Println("servidor FINANCEUP - esquema NEGOCIO corriendo en el puerto 8085")
