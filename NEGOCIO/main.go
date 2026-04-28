@@ -10,7 +10,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// enableCORS middleware para permitir peticiones de cualquier origen
 func enableCORS(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -29,14 +28,16 @@ func main() {
 
 	r := mux.NewRouter()
 
-	// ── Registro de rutas del esquema NEGOCIO ──
+	// negocio
 	routes.RegisterBancoRoutes(r)
 	routes.RegisterProductoCrediticioRoutes(r)
+	routes.RegisterAsesorRoutes(r)
 	routes.RegisterContactoAsesorRoutes(r)
 	routes.RegisterLeadRoutes(r)
 	routes.RegisterConversacionRoutes(r)
 	routes.RegisterCreditoDesembolsadoRoutes(r)
+	routes.RegisterTransaccionRoutes(r)
 
-	log.Println("servidor FINANCEUP - esquema NEGOCIO corriendo en el puerto 8085")
+	log.Println("servidor corriendo en el puerto 8085")
 	log.Fatal(http.ListenAndServe(":8085", enableCORS(r)))
 }
