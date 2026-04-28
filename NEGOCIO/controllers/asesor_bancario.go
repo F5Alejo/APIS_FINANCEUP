@@ -1,8 +1,8 @@
 package controllers
 
 import (
-	"API_GO_CRUD/config"
-	"API_GO_CRUD/models"
+	"FINANCEUP/config"
+	"FINANCEUP/models"
 	"database/sql"
 	"encoding/json"
 	"net/http"
@@ -29,7 +29,7 @@ func GetAllAsesores(w http.ResponseWriter, r *http.Request) {
 	var list []models.AsesorBancario
 	for rows.Next() {
 		var a models.AsesorBancario
-		rows.Scan(&a.ID, &a.IDBanco, &a.Nombre, &a.Apellido, &a.Email, &a.Telefono, &a.Especialidad, &a.Activo)
+		rows.Scan(&a.IDAsesor, &a.IDBanco, &a.Nombre, &a.Apellido, &a.Email, &a.Telefono, &a.Especialidad, &a.Activo)
 		list = append(list, a)
 	}
 	respondJSON(w, 200, list)
@@ -42,7 +42,7 @@ func GetAsesorByID(w http.ResponseWriter, r *http.Request) {
 	err := config.DB.QueryRow(
 		`SELECT id_asesor, id_banco, nombre, apellido, email, telefono, especialidad, activo
 		 FROM negocio.asesor_bancario WHERE id_asesor = $1`, id,
-	).Scan(&a.ID, &a.IDBanco, &a.Nombre, &a.Apellido, &a.Email, &a.Telefono, &a.Especialidad, &a.Activo)
+	).Scan(&a.IDAsesor, &a.IDBanco, &a.Nombre, &a.Apellido, &a.Email, &a.Telefono, &a.Especialidad, &a.Activo)
 
 	if err == sql.ErrNoRows {
 		respondJSON(w, 404, map[string]string{"error": "no encontrado"})
@@ -59,7 +59,7 @@ func CreateAsesor(w http.ResponseWriter, r *http.Request) {
 		`INSERT INTO negocio.asesor_bancario (id_banco, nombre, apellido, email, telefono, especialidad, activo)
 		 VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id_asesor`,
 		a.IDBanco, a.Nombre, a.Apellido, a.Email, a.Telefono, a.Especialidad, a.Activo,
-	).Scan(&a.ID)
+	).Scan(&a.IDAsesor)
 
 	if err != nil {
 		respondJSON(w, 500, map[string]string{"error": err.Error()})
