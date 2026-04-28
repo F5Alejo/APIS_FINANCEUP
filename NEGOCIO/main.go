@@ -34,7 +34,8 @@ func main() {
 	routes.RegisterProductoCrediticioRoutes(r)
 	routes.RegisterContactoAsesorRoutes(r)
 	routes.RegisterLeadRoutes(r)
-	
+	routes.RegisterConversacionRoutes(r)
+	routes.RegisterCreditoDesembolsadoRoutes(r)
 
 	log.Println("servidor FINANCEUP - esquema NEGOCIO corriendo en el puerto 8085")
 	log.Fatal(http.ListenAndServe(":8085", enableCORS(r)))
