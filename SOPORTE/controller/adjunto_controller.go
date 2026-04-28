@@ -1,8 +1,8 @@
 package controller
 
 import (
-	"api_soporte/config"
-	"api_soporte/models"
+	"soporte/config"
+	"soporte/models"
 	"database/sql"
 	"encoding/json"
 	"net/http"

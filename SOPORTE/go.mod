@@ -1,4 +1,4 @@
-module api_soporte
+module soporte
 
 go 1.21
 

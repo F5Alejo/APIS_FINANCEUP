@@ -4,8 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	"api_soporte/config"
-	"api_soporte/routes"
+	"soporte/config"
+	"soporte/routes"
 
 	"github.com/gorilla/mux"
 )
@@ -31,8 +31,11 @@ func main() {
 	r := mux.NewRouter()
 
 	// Registro de rutas — esquema soporte
+	routes.RegisterEstadoPqrRoutes(r)
 	routes.RegisterPqrRoutes(r)
+	routes.RegisterAdjuntoRoutes(r)
+	routes.RegisterRegistroActividadRoutes(r)
 
-	log.Println("Servidor soporte corriendo en el puerto 8080")
-	http.ListenAndServe(":8080", enableCORS(r))
+	log.Println("Servidor soporte corriendo en el puerto 8083")
+	http.ListenAndServe(":8083", enableCORS(r))
 }
