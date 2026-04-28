@@ -32,7 +32,8 @@ func main() {
 	// ── Registro de rutas del esquema NEGOCIO ──
 	routes.RegisterBancoRoutes(r)
 	routes.RegisterProductoCrediticioRoutes(r)
-	
+	routes.RegisterContactoAsesorRoutes(r)
+	routes.RegisterLeadRoutes(r)
 	
 
 	log.Println("servidor FINANCEUP - esquema NEGOCIO corriendo en el puerto 8085")
