@@ -6,14 +6,22 @@ import (
 
 	"EDUCACION/config"
 	"EDUCACION/routes"
+
+	"github.com/gorilla/mux"
 )
+
+
+
 
 func main() {
 	config.ConnectDB()
 
-	router := routes.SetupRoutes()
+	r:=mux.NewRouter()
+	r.PathPrefix("/").Handler(routes.RegistrarModuloEducativoRoutes())
+	r.PathPrefix("/").Handler(routes.RegistrarContenidoRoutes())
+
 
 	log.Println("Servidor EDUCACION escuchando en :8080")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
