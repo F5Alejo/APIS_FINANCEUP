@@ -2,8 +2,8 @@ package models
 
 import "time"
 
-type Categoria struct {
-	IdCategoria       int       `json:"id_categoria"`
+type TipoInversion struct {
+	IdTipoInversion   int       `json:"id_tipo_inversion"`
 	Nombre            string    `json:"nombre"`
 	Descripcion       *string   `json:"descripcion"`
 	Activo            bool      `json:"activo"`

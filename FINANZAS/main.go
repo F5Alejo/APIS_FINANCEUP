@@ -10,8 +10,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-
-
 func main() {
 	config.ConnectDB()
 

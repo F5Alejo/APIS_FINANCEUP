@@ -5,12 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"net/http"
-	"strconv"
 
 	"FINANZAS/config"
 	"FINANZAS/models"
 
-	"github.com/gorilla/mux"
 	"github.com/lib/pq"
 )
 
@@ -179,30 +177,4 @@ func scanCategoria(scan func(dest ...any) error) (models.Categoria, error) {
 
 	categoria.Descripcion = nullStringToPointer(descripcion)
 	return categoria, nil
-}
-
-func nullStringToPointer(value sql.NullString) *string {
-	if !value.Valid {
-		return nil
-	}
-
-	text := value.String
-	return &text
-}
-
-func getIDFromRequest(r *http.Request, key string) (int, error) {
-	idParam := mux.Vars(r)[key]
-	return strconv.Atoi(idParam)
-}
-
-func writeJSON(w http.ResponseWriter, statusCode int, data any) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(statusCode)
-	_ = json.NewEncoder(w).Encode(data)
-}
-
-func writeError(w http.ResponseWriter, statusCode int, message string) {
-	writeJSON(w, statusCode, map[string]string{
-		"error": message,
-	})
 }
