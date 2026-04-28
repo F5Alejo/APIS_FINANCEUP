@@ -239,5 +239,7 @@ func existeRegistro(tabla string, columna string, id int) (bool, error) {
 		return false, err
 	}
 
+
+	
 	return existe, nil
 }
