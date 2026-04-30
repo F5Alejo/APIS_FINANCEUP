@@ -10,11 +10,11 @@ El backend está compuesto por **4 microservicios independientes**, cada uno con
 
 ```
 APIS_FINANCEUP/
-├── AUTH/          → Autenticación y autorización             (puerto: en desarrollo)
-├── EDUCACION/     → Módulo educativo financiero               (puerto: 8080)
-├── FINANZAS/      → Gestión financiera, metas e inversiones   (puerto: 8081)
-├── NEGOCIO/       → Lógica de negocio                         (puerto: en desarrollo)
-└── SOPORTE/       → PQR, adjuntos y registro de actividad     (puerto: 8083)
+├── AUTH/          → Autenticación y autorización 
+├── EDUCACION/     → Módulo educativo financiero 
+├── FINANZAS/      → Gestión financiera, metas e inversiones 
+├── NEGOCIO/       → Lógica de negocio    
+└── SOPORTE/       → PQR, adjuntos y registro de actividad 
 ```
 
 Todos los servicios comparten la misma base de datos PostgreSQL (`FinanceUp`) pero operan sobre **esquemas separados**, garantizando aislamiento de datos entre módulos.
@@ -29,9 +29,6 @@ Todos los servicios comparten la misma base de datos PostgreSQL (`FinanceUp`) pe
 - [Gorilla Mux v1.8.1](https://github.com/gorilla/mux) — enrutador HTTP
 - [lib/pq v1.12.3](https://github.com/lib/pq) — driver PostgreSQL para Go
 - [PostgreSQL](https://www.postgresql.org/) — base de datos relacional (esquemas por módulo)
-- [Docker](https://docs.docker.com/engine/install/ubuntu/)
-- [Docker Compose](https://docs.docker.com/compose/)
-
 ---
 
 ### Variables de Entorno
@@ -40,16 +37,16 @@ Cada microservicio puede configurarse mediante variables de entorno. Los valores
 
 ```
 # Base de datos (compartida por todos los servicios)
-FINANCEUP_PGHOST=[dirección del servidor PostgreSQL]        # default: localhost
-FINANCEUP_PGPORT=[puerto de conexión]                       # default: 5432
-FINANCEUP_PGUSER=[usuario con acceso a la base de datos]    # default: postgres
+FINANCEUP_PGHOST=[dirección del servidor PostgreSQL]
+FINANCEUP_PGPORT=[puerto de conexión] 
+FINANCEUP_PGUSER=[usuario con acceso a la base de datos]
 FINANCEUP_PGPASS=[contraseña del usuario]
-FINANCEUP_PGDB=[nombre de la base de datos]                 # default: FinanceUp
+FINANCEUP_PGDB=[nombre de la base de datos]
 
 # Puertos HTTP por servicio
-EDUCACION_HTTP_PORT=[puerto del servicio educación]         # default: 8080
-FINANZAS_HTTP_PORT=[puerto del servicio finanzas]           # default: 8081
-SOPORTE_HTTP_PORT=[puerto del servicio soporte]             # default: 8083
+EDUCACION_HTTP_PORT=[puerto del servicio educación]
+FINANZAS_HTTP_PORT=[puerto del servicio finanzas]
+SOPORTE_HTTP_PORT=[puerto del servicio soporte]
 ```
 
 ---
@@ -64,3 +61,19 @@ git clone -b develop https://github.com/F5Alejo/APIS_FINANCEUP
 
 # 2. Moverse a la carpeta del repositorio
 cd APIS_FINANCEUP
+
+
+[Modelo de Datos](./modelo_datos.png)
+ 
+Los scripts SQL del proyecto (creación, inserción y actualización) se encuentran en la carpeta `PostgreSQL/`.
+
+
+## Licencia
+
+This file is part of FinanceUp.
+
+FinanceUp is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+FinanceUp is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with FinanceUp. If not, see <https://www.gnu.org/licenses/>.
