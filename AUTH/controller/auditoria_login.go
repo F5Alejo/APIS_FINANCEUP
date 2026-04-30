@@ -1,31 +1,41 @@
 package controller
 
 import (
+	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
+	"strconv"
 
-	"api_go_CRUD/config"
-	"api_go_CRUD/models"
+	"AUTH/config"
+	"AUTH/models"
 
 	"github.com/gorilla/mux"
 )
 
 // GET ALL auditoria_login con filtros opcionales
 func GetAllAuditoriaLogin(w http.ResponseWriter, r *http.Request) {
-	query := "SELECT id_auditoria, id_usuario, estado_evento, navegador, fecha_evento FROM auth.auditoria_login WHERE 1=1"
+	baseQuery := "SELECT id_auditoria, id_usuario, estado_evento, navegador, fecha_evento FROM auth.auditoria_login WHERE 1=1"
+	var args []interface{}
+	argCount := 1
 
 	idUsuario := r.URL.Query().Get("id_usuario")
 	estadoEvento := r.URL.Query().Get("estado_evento")
 
 	if idUsuario != "" {
-		query += " AND id_usuario=" + idUsuario
+		baseQuery += " AND id_usuario=$" + strconv.Itoa(argCount)
+		args = append(args, idUsuario)
+		argCount++
 	}
 	if estadoEvento != "" {
-		query += " AND estado_evento='" + estadoEvento + "'"
+		baseQuery += " AND estado_evento=$" + strconv.Itoa(argCount)
+		args = append(args, estadoEvento)
+		argCount++
 	}
 
-	rows, err := config.DB.Query(query)
+	rows, err := config.DB.Query(baseQuery, args...)
 	if err != nil {
+		log.Printf("Error al ejecutar la consulta de auditoría: %v", err) // Agregado para depuración
 		respondJSON(w, 500, map[string]string{"error": err.Error()})
 		return
 	}
@@ -50,7 +60,11 @@ func GetAuditoriaLoginByID(w http.ResponseWriter, r *http.Request) {
 	).Scan(&a.IDAuditoria, &a.IDUsuario, &a.EstadoEvento, &a.Navegador, &a.FechaEvento)
 
 	if err != nil {
-		respondJSON(w, 404, map[string]string{"error": "Registro de auditoría no encontrado"})
+		if err == sql.ErrNoRows {
+			respondJSON(w, 404, map[string]string{"error": "Registro de auditoría no encontrado"})
+		} else {
+			respondJSON(w, 500, map[string]string{"error": err.Error()})
+		}
 		return
 	}
 	respondJSON(w, 200, a)

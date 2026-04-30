@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"api_go_CRUD/config"
-	"api_go_CRUD/models"
+	"AUTH/config"
+	"AUTH/models"
 
 	"github.com/gorilla/mux"
 )
 
 // GET ALL usuarios con filtros opcionales por nombre, email y estado
 func GetAllUsuarios(w http.ResponseWriter, r *http.Request) {
-	query := "SELECT id_usuario, nombre, apellido, email, cedula, ciudad, estado, id_tipo_documento, activo FROM auth.usuario WHERE 1=1"
+	query := "SELECT id_usuario, nombre, apellido, email, cedula, ciudad, estado, tipo_documento, activo FROM auth.usuario WHERE 1=1"
 
 	nombre := r.URL.Query().Get("nombre")
 	email := r.URL.Query().Get("email")
@@ -39,7 +39,7 @@ func GetAllUsuarios(w http.ResponseWriter, r *http.Request) {
 	var usuarios []models.Usuario
 	for rows.Next() {
 		var u models.Usuario
-		rows.Scan(&u.IDUsuario, &u.Nombre, &u.Apellido, &u.Email, &u.Cedula, &u.Ciudad, &u.Estado, &u.IDTipoDocumento, &u.Activo)
+		rows.Scan(&u.IDUsuario, &u.Nombre, &u.Apellido, &u.Email, &u.Cedula, &u.Ciudad, &u.Estado, &u.TipoDocumento, &u.Activo)
 		usuarios = append(usuarios, u)
 	}
 	respondJSON(w, 200, usuarios)
@@ -51,8 +51,8 @@ func GetUsuarioByID(w http.ResponseWriter, r *http.Request) {
 
 	var u models.Usuario
 	err := config.DB.QueryRow(
-		"SELECT id_usuario, nombre, apellido, email, cedula, ciudad, estado, id_tipo_documento, activo FROM auth.usuario WHERE id_usuario=$1", id,
-	).Scan(&u.IDUsuario, &u.Nombre, &u.Apellido, &u.Email, &u.Cedula, &u.Ciudad, &u.Estado, &u.IDTipoDocumento, &u.Activo)
+		"SELECT id_usuario, nombre, apellido, email, cedula, ciudad, estado, tipo_documento, activo FROM auth.usuario WHERE id_usuario=$1", id,
+	).Scan(&u.IDUsuario, &u.Nombre, &u.Apellido, &u.Email, &u.Cedula, &u.Ciudad, &u.Estado, &u.TipoDocumento, &u.Activo)
 
 	if err == sql.ErrNoRows {
 		respondJSON(w, 404, map[string]string{"error": "Usuario no encontrado"})
@@ -71,8 +71,8 @@ func CreateUsuario(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&u)
 
 	err := config.DB.QueryRow(
-		"INSERT INTO auth.usuario (nombre, apellido, email, cedula, ciudad, estado, id_tipo_documento, activo) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id_usuario",
-		u.Nombre, u.Apellido, u.Email, u.Cedula, u.Ciudad, u.Estado, u.IDTipoDocumento, u.Activo,
+		"INSERT INTO auth.usuario (nombre, apellido, email, cedula, ciudad, estado, tipo_documento, activo) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id_usuario",
+		u.Nombre, u.Apellido, u.Email, u.Cedula, u.Ciudad, u.Estado, u.TipoDocumento, u.Activo,
 	).Scan(&u.IDUsuario)
 
 	if err != nil {
@@ -90,8 +90,8 @@ func UpdateUsuario(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&u)
 
 	_, err := config.DB.Exec(
-		"UPDATE auth.usuario SET nombre=$1, apellido=$2, email=$3, cedula=$4, ciudad=$5, estado=$6, id_tipo_documento=$7, activo=$8 WHERE id_usuario=$9",
-		u.Nombre, u.Apellido, u.Email, u.Cedula, u.Ciudad, u.Estado, u.IDTipoDocumento, u.Activo, id,
+		"UPDATE auth.usuario SET nombre=$1, apellido=$2, email=$3, cedula=$4, ciudad=$5, estado=$6, tipo_documento=$7, activo=$8 WHERE id_usuario=$9",
+		u.Nombre, u.Apellido, u.Email, u.Cedula, u.Ciudad, u.Estado, u.TipoDocumento, u.Activo, id,
 	)
 	if err != nil {
 		respondJSON(w, 500, map[string]string{"error": err.Error()})

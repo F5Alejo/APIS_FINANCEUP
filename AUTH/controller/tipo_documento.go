@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"api_go_CRUD/config"
-	"api_go_CRUD/models"
+	"AUTH/config"
+	"AUTH/models"
 
 	"github.com/gorilla/mux"
 )
@@ -24,7 +24,13 @@ func GetAllTiposDocumento(w http.ResponseWriter, r *http.Request) {
 	var list []models.TipoDocumento
 	for rows.Next() {
 		var td models.TipoDocumento
-		rows.Scan(&td.IDTipoDocumento, &td.Nombre, &td.Codigo, &td.Activo)
+
+		err := rows.Scan(&td.TipoDocumento, &td.Nombre, &td.Codigo, &td.Activo)
+		if err != nil {
+			respondJSON(w, 500, map[string]string{"error": err.Error()})
+			return
+		}
+
 		list = append(list, td)
 	}
 	respondJSON(w, 200, list)
@@ -37,7 +43,7 @@ func GetTipoDocumentoByID(w http.ResponseWriter, r *http.Request) {
 	var td models.TipoDocumento
 	err := config.DB.QueryRow(
 		"SELECT id_tipo_documento, nombre, codigo, activo FROM auth.tipo_documento WHERE id_tipo_documento=$1", id,
-	).Scan(&td.IDTipoDocumento, &td.Nombre, &td.Codigo, &td.Activo)
+	).Scan(&td.TipoDocumento, &td.Nombre, &td.Codigo, &td.Activo)
 
 	if err != nil {
 		respondJSON(w, 404, map[string]string{"error": "Tipo de documento no encontrado"})
@@ -54,7 +60,7 @@ func CreateTipoDocumento(w http.ResponseWriter, r *http.Request) {
 	err := config.DB.QueryRow(
 		"INSERT INTO auth.tipo_documento (nombre, codigo, activo) VALUES ($1,$2,$3) RETURNING id_tipo_documento",
 		td.Nombre, td.Codigo, td.Activo,
-	).Scan(&td.IDTipoDocumento)
+	).Scan(&td.TipoDocumento)
 
 	if err != nil {
 		respondJSON(w, 500, map[string]string{"error": err.Error()})

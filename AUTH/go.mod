@@ -1,4 +1,4 @@
-module api_go_CRUD
+module AUTH
 
 go 1.26.2
 

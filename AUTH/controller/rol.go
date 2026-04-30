@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"api_go_CRUD/config"
-	"api_go_CRUD/models"
+	"AUTH/config"
+	"AUTH/models"
 
 	"github.com/gorilla/mux"
 )

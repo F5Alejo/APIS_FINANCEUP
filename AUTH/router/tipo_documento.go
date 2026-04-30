@@ -1,7 +1,7 @@
 package router
 
 import (
-	"api_go_CRUD/controller"
+	"AUTH/controller"
 
 	"github.com/gorilla/mux"
 )
