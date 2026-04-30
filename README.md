@@ -1,4 +1,4 @@
-# FinanceUp — APIs Backend
+# FinanceUp 
 
 Plataforma de gestión financiera personal que permite a los usuarios administrar sus finanzas, inversiones y metas económicas, acceder a contenido educativo financiero y recibir soporte a través de un sistema de PQR.
 
@@ -62,6 +62,8 @@ git clone -b develop https://github.com/F5Alejo/APIS_FINANCEUP
 # 2. Moverse a la carpeta del repositorio
 cd APIS_FINANCEUP
 
+
+## Modelo De Datos
 
 [Modelo de Datos](./modelo_datos.png)
  
