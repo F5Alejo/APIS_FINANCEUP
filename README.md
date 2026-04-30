@@ -62,10 +62,12 @@ git clone -b develop https://github.com/F5Alejo/APIS_FINANCEUP
 # 2. Moverse a la carpeta del repositorio
 cd APIS_FINANCEUP
 
+```
+
+---
 
 ## Modelo De Datos
 
 [Modelo de Datos](./modelo_datos.png)
  
 Los scripts SQL del proyecto (creación, inserción y actualización) se encuentran en la carpeta `PostgreSQL/`.
-
