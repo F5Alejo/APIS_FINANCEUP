@@ -1,0 +1,111 @@
+package controllers
+
+import (
+	"NEGOCIO/config"
+	"NEGOCIO/models"
+	"database/sql"
+	"encoding/json"
+	"net/http"
+
+	"github.com/gorilla/mux"
+)
+
+func GetAllProductosCrediticios(w http.ResponseWriter, r *http.Request) {
+	query := `SELECT id_producto, id_banco, nombre_producto, descripcion,
+	          monto_minimo, monto_maximo, tasa_minima, tasa_maxima,
+	          plazo_minimo, plazo_maximo, requisitos, activo
+	          FROM negocio.producto_crediticio WHERE 1=1`
+
+	nombre := r.URL.Query().Get("nombre_producto")
+	if nombre != "" {
+		query += " AND nombre_producto ILIKE '%" + nombre + "%'"
+	}
+
+	rows, err := config.DB.Query(query)
+	if err != nil {
+		respondJSON(w, 500, map[string]string{"error": err.Error()})
+		return
+	}
+	defer rows.Close()
+
+	var list []models.ProductoCrediticio
+	for rows.Next() {
+		var p models.ProductoCrediticio
+		rows.Scan(&p.ID, &p.IDBanco, &p.NombreProducto, &p.Descripcion,
+			&p.MontoMinimo, &p.MontoMaximo, &p.TasaMinima, &p.TasaMaxima,
+			&p.PlazoMinimo, &p.PlazoMaximo, &p.Requisitos, &p.Activo)
+		list = append(list, p)
+	}
+	respondJSON(w, 200, list)
+}
+
+func GetProductoCrediticioByID(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	var p models.ProductoCrediticio
+
+	err := config.DB.QueryRow(
+		`SELECT id_producto, id_banco, nombre_producto, descripcion,
+		 monto_minimo, monto_maximo, tasa_minima, tasa_maxima,
+		 plazo_minimo, plazo_maximo, requisitos, activo
+		 FROM negocio.producto_crediticio WHERE id_producto = $1`, id,
+	).Scan(&p.ID, &p.IDBanco, &p.NombreProducto, &p.Descripcion,
+		&p.MontoMinimo, &p.MontoMaximo, &p.TasaMinima, &p.TasaMaxima,
+		&p.PlazoMinimo, &p.PlazoMaximo, &p.Requisitos, &p.Activo)
+
+	if err == sql.ErrNoRows {
+		respondJSON(w, 404, map[string]string{"error": "no encontrado"})
+		return
+	}
+	respondJSON(w, 200, p)
+}
+
+func CreateProductoCrediticio(w http.ResponseWriter, r *http.Request) {
+	var p models.ProductoCrediticio
+	json.NewDecoder(r.Body).Decode(&p)
+
+	err := config.DB.QueryRow(
+		`INSERT INTO negocio.producto_crediticio
+		 (id_banco, nombre_producto, descripcion, monto_minimo, monto_maximo,
+		  tasa_minima, tasa_maxima, plazo_minimo, plazo_maximo, requisitos, activo)
+		 VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) RETURNING id_producto`,
+		p.IDBanco, p.NombreProducto, p.Descripcion, p.MontoMinimo, p.MontoMaximo,
+		p.TasaMinima, p.TasaMaxima, p.PlazoMinimo, p.PlazoMaximo, p.Requisitos, p.Activo,
+	).Scan(&p.ID)
+
+	if err != nil {
+		respondJSON(w, 500, map[string]string{"error": err.Error()})
+		return
+	}
+	respondJSON(w, 201, p)
+}
+
+func UpdateProductoCrediticio(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	var p models.ProductoCrediticio
+	json.NewDecoder(r.Body).Decode(&p)
+
+	_, err := config.DB.Exec(
+		`UPDATE negocio.producto_crediticio
+		 SET id_banco=$1, nombre_producto=$2, descripcion=$3, monto_minimo=$4,
+		     monto_maximo=$5, tasa_minima=$6, tasa_maxima=$7, plazo_minimo=$8,
+		     plazo_maximo=$9, requisitos=$10, activo=$11
+		 WHERE id_producto=$12`,
+		p.IDBanco, p.NombreProducto, p.Descripcion, p.MontoMinimo, p.MontoMaximo,
+		p.TasaMinima, p.TasaMaxima, p.PlazoMinimo, p.PlazoMaximo, p.Requisitos, p.Activo, id,
+	)
+	if err != nil {
+		respondJSON(w, 500, map[string]string{"error": err.Error()})
+		return
+	}
+	respondJSON(w, 200, map[string]string{"message": "Dato Actualizado"})
+}
+
+func DeleteProductoCrediticio(w http.ResponseWriter, r *http.Request) {
+	id := mux.Vars(r)["id"]
+	_, err := config.DB.Exec("DELETE FROM negocio.producto_crediticio WHERE id_producto=$1", id)
+	if err != nil {
+		respondJSON(w, 500, map[string]string{"error": err.Error()})
+		return
+	}
+	respondJSON(w, 200, map[string]string{"message": "Dato Eliminado"})
+}
