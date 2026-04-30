@@ -69,5 +69,4 @@ cd APIS_FINANCEUP
 ## Modelo De Datos
 
 [Modelo de Datos](./modelo_datos.png)
- 
-Los scripts SQL del proyecto (creación, inserción y actualización) se encuentran en la carpeta `PostgreSQL/`.
+
