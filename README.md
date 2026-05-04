@@ -16,19 +16,7 @@ API REST en Go para la gestión del ecosistema bancario y comercial de la plataf
 
 ---
 
-### Variables de Entorno
 
-Configurar las siguientes variables antes de ejecutar el proyecto (ver `config/db.go`):
-
-```
-NEGOCIO_PGHOST=[dirección del servidor PostgreSQL]
-NEGOCIO_PGPORT=[puerto de conexión, por defecto 5432]
-NEGOCIO_PGUSER=[usuario con acceso a la base de datos]
-NEGOCIO_PGPASS=[contraseña del usuario]
-NEGOCIO_PGDB=[nombre de la base de datos, por defecto FINANCEUP]
-NEGOCIO_PGSCHEMA=[esquema de tablas, por defecto negocio]
-NEGOCIO_HTTP_PORT=[puerto de ejecución, por defecto 8085]
-```
 
 ---
 
