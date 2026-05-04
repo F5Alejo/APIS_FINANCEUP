@@ -8,14 +8,26 @@ El backend está compuesto por **4 microservicios independientes**, cada uno con
 
 ## Arquitectura General
 
-```
+```text
 APIS_FINANCEUP/
 ├── AUTH/          → Autenticación y autorización 
 ├── EDUCACION/     → Módulo educativo financiero 
 ├── FINANZAS/      → Gestión financiera, metas e inversiones 
 ├── NEGOCIO/       → Lógica de negocio    
+├── PostgreSQL/    → Scripts de base de datos SQL
 └── SOPORTE/       → PQR, adjuntos y registro de actividad 
 ```
+
+### Documentación de Módulos
+
+Para conocer más en detalle cada microservicio, puedes consultar la documentación específica de cada carpeta:
+
+- [Módulo de Autenticación (AUTH)](./AUTH/README.md)
+- [Módulo de Educación (EDUCACION)](./EDUCACION/README.md)
+- [Módulo de Finanzas (FINANZAS)](./FINANZAS/README.md)
+- [Módulo de Negocio (NEGOCIO)](./NEGOCIO/README.md)
+- [Base de Datos (PostgreSQL)](./PostgreSQL/README.md)
+- [Módulo de Soporte (SOPORTE)](./SOPORTE/README.md)
 
 Todos los servicios comparten la misma base de datos PostgreSQL (`FinanceUp`) pero operan sobre **esquemas separados**, garantizando aislamiento de datos entre módulos.
 
